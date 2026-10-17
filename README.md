@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free, student-focused learning resources for ISC Class 11 and 12 students.">
+    <meta name="theme-color" content="#007a78">
     <title>Becules — Learn Smarter. Achieve Greater.</title>
     <style>
         :root {
@@ -15,13 +17,12 @@
             --border-color: #d1e8e8;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body, button, input { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        button, a { -webkit-tap-highlight-color: transparent; }
+        button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid rgba(0,122,120,.35); outline-offset: 3px; }
+        button:disabled { cursor: not-allowed; opacity: .65; }
 
         body {
             background-color: var(--bg-color);
@@ -87,14 +88,16 @@
 
         /* Main Sections Layout */
         .page-section {
-            max-width: 850px;
-            width: 90%;
-            margin: 60px auto;
-            min-height: 70vh;
+            max-width: 980px;
+            width: min(90%, 980px);
+            margin: 52px auto;
+            min-height: 65vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            animation: section-enter 220ms ease-out;
         }
+        @keyframes section-enter { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Home Section */
         .badge {
@@ -166,7 +169,7 @@
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 20px;
         }
 
@@ -174,16 +177,17 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(20,70,70,.035);
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
+            text-align: left;
+            color: inherit;
+            width: 100%;
+            transition: transform .2s, border-color .2s, box-shadow .2s;
         }
 
-        .feature-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary);
-        }
+        .feature-card:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 8px 24px rgba(20,70,70,.08); }
+        .feature-card:focus-visible { outline: 3px solid rgba(0,122,120,.35); outline-offset: 3px; }
 
         .feature-card h3 {
             font-size: 16px;
@@ -253,20 +257,13 @@
         }
 
         .resource-links button {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--primary);
-            background: rgba(0, 122, 120, 0.06);
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s;
+            font-size: 13px; font-weight: 650; color: var(--primary);
+            background: rgba(0,122,120,.07); padding: 8px 12px; min-height: 36px;
+            border-radius: 7px; border: 1px solid transparent; cursor: pointer;
+            transition: background .2s, border-color .2s;
         }
 
-        .resource-links button:hover {
-            background: rgba(0, 122, 120, 0.18);
-        }
+        .resource-links button:hover, .resource-links button[aria-pressed="true"] { background: rgba(0,122,120,.14); border-color: rgba(0,122,120,.25); }
 
         /* Content Boxes */
         .content-box {
@@ -311,22 +308,32 @@
             margin: 0 auto;
         }
 
-        /* Responsive Mobile Layout */
+        .viewer-container p { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-top: 6px; }
+        .status-message { margin-top: 14px; padding: 12px 14px; border-radius: 8px; background: rgba(0,122,120,.07); color: var(--primary-dark); font-size: 14px; line-height: 1.5; }
+        .contribute-form { margin-top: 22px; display: grid; gap: 14px; }
+        .contribute-form label { display: grid; gap: 7px; font-size: 14px; font-weight: 600; }
+        .contribute-form input { width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 11px 12px; background: #fff; color: var(--text-main); font-size: 14px; }
+        .muted-small { color: var(--text-muted); font-size: 13px; line-height: 1.5; }
+
         @media (max-width: 768px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            h1 {
-                font-size: 32px;
-            }
-            .subject-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            nav {
-                gap: 14px;
-            }
+            .nav-container { align-items: flex-start; flex-direction: column; gap: 12px; padding: 14px 0; }
+            nav { width: 100%; gap: 18px; overflow-x: auto; padding: 2px 0 5px; }
+            nav a { white-space: nowrap; font-size: 14px; }
+            .page-section { margin: 36px auto; min-height: 60vh; }
+            .features-grid { grid-template-columns: 1fr; }
+            h1 { font-size: clamp(30px, 8vw, 40px); }
+            h2.section-title { font-size: 28px; }
+            .subject-item { flex-direction: column; align-items: flex-start; gap: 10px; padding-bottom: 14px; }
+            .resource-links { flex-wrap: wrap; }
+            .content-box, .class-group { padding: 20px; }
+        }
+        @media (max-width: 420px) {
+            .actions { flex-direction: column; align-items: stretch; }
+            .actions .btn { width: 100%; }
+            .resource-links button { padding-inline: 10px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
         }
     </style>
 </head>
@@ -358,18 +365,15 @@
             </div>
 
             <div class="features-grid">
-                <div class="feature-card" onclick="showSection('resources')">
-                    <h3>Chapter MCQs</h3>
-                    <p>Test your knowledge instantly with focused questions for every chapter.</p>
-                </div>
-                <div class="feature-card" onclick="showSection('resources')">
-                    <h3>Competency Questions</h3>
-                    <p>Build critical thinking and real-world application skills easily.</p>
-                </div>
-                <div class="feature-card" onclick="showSection('resources')">
-                    <h3>Clean Study Notes</h3>
-                    <p>Revise key definitions, formulas, and concepts in one clear place.</p>
-                </div>
+                <button type="button" class="feature-card" onclick="showSection('resources')">
+                    <h3>Chapter MCQs</h3><p>Focused practice organised by class, subject, and chapter.</p>
+                </button>
+                <button type="button" class="feature-card" onclick="showSection('resources')">
+                    <h3>Competency Questions</h3><p>Build confidence with application-focused learning.</p>
+                </button>
+                <button type="button" class="feature-card" onclick="showSection('resources')">
+                    <h3>Clean Study Notes</h3><p>Keep key concepts and revision material organised in one place.</p>
+                </button>
             </div>
         </div>
     </section>
@@ -443,8 +447,8 @@
             <!-- Dynamic Interactive Viewer Box -->
             <div id="viewer" class="viewer-container">
                 <h3 id="viewer-title">Selected Resource</h3>
-                <p id="viewer-desc" style="color: var(--text-muted); font-size: 14px; margin-top: 6px;">Content packages are loading smoothly for your curriculum...</p>
-                <button class="btn btn-primary" style="margin-top: 15px; font-size: 13px; padding: 8px 16px;" onclick="alert('Downloading/Opening Chapter PDF package!')">Download / View PDF</button>
+                <p id="viewer-desc">Choose a class, subject, and resource type to view its status.</p>
+                <p id="viewer-status" class="status-message" role="status">Study materials have not been added here yet.</p>
             </div>
         </div>
     </section>
@@ -478,54 +482,85 @@
                 <li><strong>What you can share:</strong> Handwritten or typed chapter summaries, shortcut sheets, or MCQs.</li>
                 <li><strong>How to submit:</strong> Upload files via our quick submission form or send a pull request on GitHub.</li>
             </ul>
-            <div style="margin-top: 25px;">
-                <button class="btn btn-primary" onclick="triggerUploadModal()">Upload Notes / Submit Material →</button>
-            </div>
+            <form id="contribution-form" class="contribute-form">
+                <label for="contributor-name">Your name (optional)
+                    <input id="contributor-name" name="name" type="text" maxlength="80" autocomplete="name" placeholder="Enter your name">
+                </label>
+                <label for="contribution-title">Material title
+                    <input id="contribution-title" name="title" type="text" maxlength="120" required placeholder="e.g. Laws of Motion — summary">
+                </label>
+                <label for="contribution-file">Choose a file
+                    <input id="contribution-file" name="file" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt">
+                </label>
+                <p class="muted-small">This page is a front-end prototype. Submissions are not uploaded or stored until a submission service is connected.</p>
+                <button class="btn btn-primary" type="submit">Prepare Contribution</button>
+                <p id="contribution-status" class="status-message" role="status" hidden></p>
+            </form>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        © 2026 Becules · Learn Smarter. Achieve Greater.[span_0](start_span)[span_0](end_span)
+        © 2026 Becules · Learn Smarter. Achieve Greater.
     </footer>
 
-    <!-- Interactive Navigation and Widget Script -->
     <script>
+        "use strict";
+        const sectionIds = ["home", "resources", "about", "contribute"];
+
         function showSection(sectionId) {
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('resources').style.display = 'none';
-            document.getElementById('about').style.display = 'none';
-            document.getElementById('contribute').style.display = 'none';
-
-            document.getElementById('nav-home').classList.remove('active');
-            document.getElementById('nav-resources').classList.remove('active');
-            document.getElementById('nav-about').classList.remove('active');
-            document.getElementById('nav-contribute').classList.remove('active');
-
-            document.getElementById(sectionId).style.display = 'flex';
-            document.getElementById('nav-' + sectionId).classList.add('active');
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (!sectionIds.includes(sectionId)) return;
+            sectionIds.forEach((id) => {
+                const section = document.getElementById(id);
+                const navLink = document.getElementById("nav-" + id);
+                const active = id === sectionId;
+                section.style.display = active ? "flex" : "none";
+                section.setAttribute("aria-hidden", String(!active));
+                if (navLink) {
+                    navLink.classList.toggle("active", active);
+                    if (active) navLink.setAttribute("aria-current", "page");
+                    else navLink.removeAttribute("aria-current");
+                }
+            });
+            if (window.location.hash !== "#" + sectionId) history.replaceState(null, "", "#" + sectionId);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
-        function openResource(subject, type) {
-            const viewer = document.getElementById('viewer');
-            const title = document.getElementById('viewer-title');
-            const desc = document.getElementById('viewer-desc');
-
-            viewer.style.display = 'block';
-            title.innerText = `${subject} — ${type}`;
-            desc.innerText = `Accessing curated chapter modules, practice sets, and verified ${type.toLowerCase()} materials for ${subject}.`;
-            
-            viewer.scrollIntoView({ behavior: 'smooth' });
+        function openResource(subject, type, button) {
+            document.querySelectorAll(".resource-links button").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+            document.getElementById("viewer").style.display = "block";
+            document.getElementById("viewer-title").textContent = subject + " — " + type;
+            document.getElementById("viewer-desc").textContent = "Selected resource: " + type + " for " + subject + ".";
+            document.getElementById("viewer-status").textContent = "This resource area is ready to be connected to the relevant study material. No notes, MCQs, or competency questions have been added yet.";
+            document.getElementById("viewer").scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
 
-        function triggerUploadModal() {
-            let userNote = prompt("Enter your name or note title to share your contribution:");
-            if (userNote) {
-                alert(`Thank you, ${userNote}! Your contribution request has been registered. You can connect via GitHub or upload files directly.`);
-            }
-        }
+        document.querySelectorAll(".resource-links button").forEach((button) => {
+            button.setAttribute("aria-pressed", "false");
+            button.addEventListener("click", () => {
+                const row = button.closest(".subject-item");
+                const subject = row.querySelector("span").textContent.replace(/^\S+\s*/, "").trim();
+                const className = button.closest(".class-group").querySelector("h3").textContent.includes("12") ? "Class 12" : "Class 11";
+                openResource(className + " " + subject, button.textContent.trim(), button);
+            });
+        });
+
+        document.getElementById("contribution-form").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const titleInput = document.getElementById("contribution-title");
+            const fileInput = document.getElementById("contribution-file");
+            const status = document.getElementById("contribution-status");
+            const title = titleInput.value.trim();
+            if (!title) { titleInput.focus(); return; }
+            const file = fileInput.files && fileInput.files[0];
+            status.hidden = false;
+            status.textContent = file
+                ? 'Contribution details prepared for "' + title + '" with file "' + file.name + '". Nothing has been uploaded; connect a backend to enable submissions.'
+                : 'Contribution details prepared for "' + title + '". Nothing has been submitted or stored; connect a backend to enable submissions.';
+        });
+
+        const initialSection = window.location.hash.slice(1);
+        showSection(sectionIds.includes(initialSection) ? initialSection : "home");
     </script>
 </body>
 </html>
