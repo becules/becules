@@ -239,10 +239,10 @@
 
         // Application State
         const state = {
-            currentPage: 'home', // Initial default page set to HOME
-            selectedClass: 11, // 11 or 12
-            selectedSubject: 'physics', // physics, chemistry, mathematics
-            completedTopics: {}, // Stores topic keys e.g. physics_11_0: true
+            currentPage: 'home',
+            selectedClass: 11,
+            selectedSubject: 'physics',
+            completedTopics: {},
             currentModal: null,
             selectedOption: null
         };
@@ -348,7 +348,7 @@
                                 <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-500 flex items-center justify-center mx-auto mb-2 text-lg font-bold">
                                     <i class="fa-solid fa-calculator"></i>
                                 </div>
-                                <h3 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-teal-700">Mathematics</h3>
+                                <h3 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-teal-700 whitespace-nowrap">Mathematics</h3>
                             </div>
                         </div>
                     </div>
@@ -357,7 +357,7 @@
                     <div class="mt-6 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div class="flex items-center space-x-4">
                             <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-lg shrink-0">
-                                <i class="fa-solid fa-bullseye"></i>
+                                <i class="fa-solid fa-graduation-cap"></i>
                             </div>
                             <div>
                                 <h3 class="font-bold text-sm text-slate-900">ISC Practice Tests</h3>
@@ -394,10 +394,10 @@
                     </div>
 
                     <!-- Top 3 Subject Progress Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="flex flex-row items-center justify-between gap-3 sm:gap-4 overflow-x-auto pb-4 custom-scrollbar mb-8">
                         
                         <!-- Physics Card -->
-                        <div onclick="switchSubject('physics')" class="p-5 rounded-2xl bg-white border ${state.selectedSubject === 'physics' ? 'border-teal-500 ring-2 ring-teal-500/10' : 'border-slate-200'} cursor-pointer hover:border-teal-400 transition shadow-sm">
+                        <div onclick="switchSubject('physics')" class="flex-1 min-w-[220px] p-4 rounded-2xl bg-white border ${state.selectedSubject === 'physics' ? 'border-teal-500 ring-2 ring-teal-500/10' : 'border-slate-200'} cursor-pointer hover:border-teal-400 transition shadow-sm shrink-0">
                             <div class="flex items-center space-x-3">
                                 <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center font-bold">
                                     <i class="fa-solid fa-atom"></i>
@@ -416,7 +416,7 @@
                         </div>
 
                         <!-- Chemistry Card -->
-                        <div onclick="switchSubject('chemistry')" class="p-5 rounded-2xl bg-white border ${state.selectedSubject === 'chemistry' ? 'border-teal-500 ring-2 ring-teal-500/10' : 'border-slate-200'} cursor-pointer hover:border-teal-400 transition shadow-sm">
+                        <div onclick="switchSubject('chemistry')" class="flex-1 min-w-[220px] p-4 rounded-2xl bg-white border ${state.selectedSubject === 'chemistry' ? 'border-teal-500 ring-2 ring-teal-500/10' : 'border-slate-200'} cursor-pointer hover:border-teal-400 transition shadow-sm shrink-0">
                             <div class="flex items-center space-x-3">
                                 <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center font-bold">
                                     <i class="fa-solid fa-flask"></i>
@@ -435,13 +435,13 @@
                         </div>
 
                         <!-- Mathematics Card -->
-                        <div onclick="switchSubject('mathematics')" class="p-5 rounded-2xl bg-white border ${state.selectedSubject === 'mathematics' ? 'border-teal-500 ring-2 ring-teal-500/10' : 'border-slate-200'} cursor-pointer hover:border-teal-400 transition shadow-sm">
+                        <div onclick="switchSubject('mathematics')" class="flex-1 min-w-[220px] p-4 rounded-2xl bg-white border ${state.selectedSubject === 'mathematics' ? 'border-teal-500 ring-2 ring-teal-500/10' : 'border-slate-200'} cursor-pointer hover:border-teal-400 transition shadow-sm shrink-0">
                             <div class="flex items-center space-x-3">
                                 <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold">
                                     <i class="fa-solid fa-calculator"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-bold text-sm text-slate-900">Mathematics</h3>
+                                    <h3 class="font-bold text-sm text-slate-900 whitespace-nowrap">Mathematics</h3>
                                     <p class="text-xs text-slate-400">24 Chapters</p>
                                 </div>
                             </div>
@@ -495,7 +495,7 @@
                                                 <span>Completed</span>
                                             </span>
                                         ` : ''}
-                                        <button onclick="openPracticeModal('${state.selectedSubject}', ${state.selectedClass}, ${idx})" class="px-4 py-2 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-teal-600 hover:text-white transition">
+                                        <button onclick="openPracticeModal('${state.selectedSubject}', ${state.selectedClass},${idx})" class="px-4 py-2 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-teal-600 hover:text-white transition">
                                             Practice Test
                                         </button>
                                     </div>
@@ -509,17 +509,21 @@
         }
 
         // -----------------------
-        // ABOUT PAGE
+        // ABOUT PAGE (UPDATED)
         // -----------------------
         function renderAbout() {
             return `
                 <div class="max-w-3xl mx-auto px-4 py-12">
                     <div class="bg-white rounded-2xl p-8 border border-slate-200/80 shadow-sm">
                         <h1 class="text-2xl font-extrabold text-slate-900">About Becules</h1>
-                        <p class="text-xs font-bold text-teal-600 uppercase tracking-wider mt-1">Open Source. Not for Profit. Student-Focused.</p>
+                        <p class="text-xs font-bold text-teal-600 uppercase tracking-wider mt-1">OPEN SOURCE. NOT FOR PROFIT. STUDENT-FOCUSED.</p>
                         
                         <p class="text-sm text-slate-600 mt-4 leading-relaxed">
-                            Becules is a free, open-learning initiative built for ISC Class 11 and 12 students. We know how overwhelming heavy textbooks and unorganized guides can get during exam season. Our mission is to strip away the clutter and give you crisp, high-quality practice materials that actually help you score.
+                            Becules is a free, open-learning platform created for ISC Class 11 and 12 students. We started this project because thick textbooks and unorganized guides make exam season way more stressful than it needs to be. Our goal is simple: strip away the clutter and give you straightforward, high-quality study materials that actually help you score higher.
+                        </p>
+
+                        <p class="text-sm text-slate-600 mt-3 leading-relaxed">
+                            What makes this special? It’s built entirely by students from <strong>Ida Scudder School (ISC Batch of 2028)</strong>—people sitting in the exact same classrooms, learning the same syllabus, and prepping for the same exams as you.
                         </p>
 
                         <ul class="mt-6 space-y-3 text-xs font-semibold text-slate-700">
@@ -529,11 +533,11 @@
                             </li>
                             <li class="flex items-center space-x-2">
                                 <i class="fa-solid fa-check-circle text-teal-600 text-sm"></i>
-                                <span><strong>Zero distractions</strong> with a clean focused interface.</span>
+                                <span><strong>Zero distractions</strong> with a clean, focused interface.</span>
                             </li>
                             <li class="flex items-center space-x-2">
                                 <i class="fa-solid fa-check-circle text-teal-600 text-sm"></i>
-                                <span><strong>Built by students</strong>, for students across ISC schools.</span>
+                                <span>Built by <strong>Ida Scudder School students (Batch of 2028)</strong> for ISC students everywhere.</span>
                             </li>
                         </ul>
                     </div>
@@ -585,7 +589,7 @@
                                 <input type="text" required placeholder="e.g. Laws of Motion - summary" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-teal-500">
                             </div>
 
-                            <!-- New File Upload Input Field -->
+                            <!-- File Upload Input Field -->
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Attach File (PDF, Image, Doc)</label>
                                 <input type="file" required class="w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 cursor-pointer border border-slate-200 rounded-xl bg-slate-50">
@@ -680,14 +684,12 @@
                 showToast("Incorrect. Check the concept solution below.");
             }
 
-            // Mark topic completed and dynamically recalculate subject percentage
             const key = `${subj}_${cls}_${idx}`;
             state.completedTopics[key] = true;
 
             document.getElementById('explanation-text').textContent = data.exp;
             document.getElementById('explanation-box').classList.remove('hidden');
 
-            // Re-render Resources page behind modal so percentages instantly refresh
             setTimeout(() => {
                 if (state.currentPage === 'resources') renderMain();
             }, 300);
@@ -722,3 +724,4 @@
         }
     </script>
 </body>
+</html>
