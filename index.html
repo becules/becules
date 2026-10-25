@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Becules - Last-Minute ISC & JEE Physics Revision</title>
+  <title>Becules • Last-Minute ISC & JEE Physics Revision</title>
   
-  <!-- Font & Icons -->
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -15,140 +15,192 @@
 </head>
 <body>
 
-  <!-- Sticky Header -->
+  <!-- Ambient Glow Backdrop -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <!-- Navigation Bar -->
   <header class="navbar">
     <div class="nav-container">
-      <div class="logo">
-        Becules<span>.</span> <span class="badge">Physics Edition</span>
+      <div class="logo-box">
+        <div class="logo-symbol"><i class="fa-solid fa-atom"></i></div>
+        <span class="logo-text">Becules<span>.</span></span>
+        <span class="tag-version">ISC PHY</span>
       </div>
-      <div class="nav-actions">
-        <span class="target-tag"><i class="fa-solid fa-bolt"></i> Night-Before Prep</span>
+
+      <div class="nav-right">
+        <div class="pulse-indicator">
+          <span class="pulse-dot"></span>
+          <span class="pulse-label">Exam Sprint Active</span>
+        </div>
+
+        <!-- Light / Dark Mode Toggle Button -->
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme" onclick="toggleTheme()">
+          <i class="fa-solid fa-moon icon-dark"></i>
+          <i class="fa-solid fa-sun icon-light"></i>
+        </button>
       </div>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <span class="pill">ISC 11 & 12 • High-Yield Revision</span>
-      <h1>Master ISC Physics.<br><span class="accent-text">Zero Fluff. Last-Minute Ready.</span></h1>
-      <p class="subtitle">Quick formula recaps, high-probability ISC & JEE MCQs, and instant explanations to save your grades the night before exams.</p>
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-chip">
+        <i class="fa-solid fa-bolt-lightning text-gradient"></i>
+        <span>Built for the 11th-hour Crammer</span>
+      </div>
+      <h1 class="hero-heading">
+        Ace Physics Before <br/>
+        <span class="hero-gradient">The Morning Bell.</span>
+      </h1>
+      <p class="hero-subtext">
+        Zero fluff. Direct formula recaps, high-probability ISC MCQs, and instant breakdown solutions designed for maximum score recovery tonight.
+      </p>
     </div>
   </section>
 
-  <!-- Subject Selector & Request Access Trackers -->
-  <section class="container subject-section">
-    <div class="section-header">
-      <h2>Select Subject</h2>
-      <p>Physics is fully active. Vote to fast-track upcoming subjects.</p>
+  <!-- Subject Access Grid -->
+  <section class="container subjects-wrapper">
+    <div class="section-title-row">
+      <div>
+        <h2 class="section-heading">Curriculum Modules</h2>
+        <p class="section-subheading">Physics is completely unlocked. Vote to fast-track remaining branches.</p>
+      </div>
     </div>
 
-    <div class="subject-grid">
+    <div class="cards-grid">
       <!-- Active Physics Card -->
-      <div class="subject-card active">
-        <div class="card-icon physics-icon"><i class="fa-solid fa-atom"></i></div>
-        <div class="card-content">
-          <div class="card-title-row">
-            <h3>Physics</h3>
-            <span class="status-live"><i class="fa-solid fa-circle"></i> Live</span>
+      <div class="card-item live-card">
+        <div class="card-top">
+          <div class="icon-bubble physics-bubble">
+            <i class="fa-solid fa-atom"></i>
           </div>
-          <p class="card-desc">Complete Class 11 & 12 question bank, formulas & rapid notes.</p>
+          <span class="badge-status live-badge"><span class="badge-ping"></span> Live & Active</span>
+        </div>
+        <div class="card-info">
+          <h3>Physics Mastery</h3>
+          <p>Class 11 & 12 rapid concept drills, instant solutions, and formula summaries.</p>
+        </div>
+        <div class="card-stats">
+          <span class="highlight-stat"><i class="fa-solid fa-layer-group"></i> 22 Chapters Total</span>
         </div>
       </div>
 
-      <!-- Locked Chemistry Card with Request Tracker -->
-      <div class="subject-card locked">
-        <div class="card-icon chem-icon"><i class="fa-solid fa-flask"></i></div>
-        <div class="card-content">
-          <div class="card-title-row">
-            <h3>Chemistry</h3>
-            <span class="status-locked"><i class="fa-solid fa-lock"></i> Locked</span>
+      <!-- Chemistry Card (Locked with Live Tracker) -->
+      <div class="card-item locked-card">
+        <div class="card-top">
+          <div class="icon-bubble chem-bubble">
+            <i class="fa-solid fa-flask-vial"></i>
           </div>
-          <p class="card-desc">Physical, Organic & Inorganic rapid test modules.</p>
-          <div class="request-row">
-            <button class="request-btn" onclick="requestSubject('chemistry')">
-              <i class="fa-solid fa-thumbs-up"></i> Request Access
-            </button>
-            <span class="vote-count" id="chem-votes">Loading votes...</span>
-          </div>
+          <span class="badge-status locked-badge"><i class="fa-solid fa-lock"></i> Locked</span>
+        </div>
+        <div class="card-info">
+          <h3>Chemistry</h3>
+          <p>Organic reaction roadmaps, physical numericals, and reagent sheets.</p>
+        </div>
+        <div class="vote-action-bar">
+          <button class="upvote-btn" onclick="registerVote('chemistry')">
+            <i class="fa-solid fa-fire"></i> Request Access
+          </button>
+          <span class="vote-number" id="chem-count">Loading...</span>
         </div>
       </div>
 
-      <!-- Locked Mathematics Card with Request Tracker -->
-      <div class="subject-card locked">
-        <div class="card-icon math-icon"><i class="fa-solid fa-calculator"></i></div>
-        <div class="card-content">
-          <div class="card-title-row">
-            <h3>Mathematics</h3>
-            <span class="status-locked"><i class="fa-solid fa-lock"></i> Locked</span>
+      <!-- Mathematics Card (Locked with Live Tracker) -->
+      <div class="card-item locked-card">
+        <div class="card-top">
+          <div class="icon-bubble math-bubble">
+            <i class="fa-solid fa-compass-drafting"></i>
           </div>
-          <p class="card-desc">Calculus, Vectors, Probability & quick tricks.</p>
-          <div class="request-row">
-            <button class="request-btn" onclick="requestSubject('mathematics')">
-              <i class="fa-solid fa-thumbs-up"></i> Request Access
-            </button>
-            <span class="vote-count" id="math-votes">Loading votes...</span>
-          </div>
+          <span class="badge-status locked-badge"><i class="fa-solid fa-lock"></i> Locked</span>
+        </div>
+        <div class="card-info">
+          <h3>Mathematics</h3>
+          <p>Calculus shortcuts, vector tricks, determinants, and step-saver guides.</p>
+        </div>
+        <div class="vote-action-bar">
+          <button class="upvote-btn" onclick="registerVote('mathematics')">
+            <i class="fa-solid fa-fire"></i> Request Access
+          </button>
+          <span class="vote-number" id="math-count">Loading...</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Main Revision & Quiz Container -->
-  <main class="container app-workspace">
-    <!-- Class Toggle -->
-    <div class="class-toggle-bar">
-      <button class="class-btn active" id="btn-cls-11" onclick="switchClass(11)">Class 11</button>
-      <button class="class-btn" id="btn-cls-12" onclick="switchClass(12)">Class 12</button>
+  <!-- Main App Workspace -->
+  <main class="container workspace-container">
+    
+    <!-- Class Switcher -->
+    <div class="class-selector">
+      <div class="selector-track">
+        <button class="selector-btn" id="btn-11" onclick="switchClass(11)">
+          <span>Class XI</span>
+        </button>
+        <button class="selector-btn active" id="btn-12" onclick="switchClass(12)">
+          <span>Class XII</span>
+        </button>
+      </div>
+      <div class="score-pill" id="global-score-pill">
+        <i class="fa-solid fa-award"></i> Session: <span id="session-score">0</span> pts
+      </div>
     </div>
 
-    <!-- Layout: Chapter List / Material Tabs on Left, Active Quiz on Right -->
-    <div class="workspace-grid">
+    <!-- Workspace Main Split -->
+    <div class="workspace-layout">
       
-      <!-- Chapters & Notes Column -->
-      <aside class="sidebar-chapters">
-        <div class="box-header">
-          <h3><i class="fa-solid fa-book-bookmark"></i> Chapters</h3>
-          <span class="sub-counter" id="chapter-count">0 Chapters</span>
+      <!-- Left Column: Chapter Navigator -->
+      <aside class="sidebar-box">
+        <div class="sidebar-header">
+          <div class="sidebar-title">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Chapters</span>
+          </div>
+          <span class="chip-count" id="total-chapters-tag">0 Available</span>
         </div>
-        <div class="chapter-list custom-scroll" id="chapter-list">
-          <!-- Chapters rendered dynamically -->
+        <div class="chapters-scroll custom-scroll" id="chapter-list">
+          <!-- Populated by JavaScript -->
         </div>
       </aside>
 
-      <!-- Active Chapter Arena -->
-      <section class="content-arena">
+      <!-- Right Column: Quiz & Revision Arena -->
+      <section class="arena-box">
         
-        <!-- Chapter Header & Study Materials Bar -->
-        <div class="arena-header">
-          <div>
-            <span class="mini-tag" id="current-subject-tag">PHYSICS CLASS 12</span>
-            <h2 id="current-chapter-title">Select a Chapter</h2>
+        <!-- Arena Navigation & Materials Bar -->
+        <div class="arena-top">
+          <div class="arena-meta">
+            <span class="tag-meta" id="current-badge">PHYSICS • CLASS 12</span>
+            <h2 class="arena-title" id="current-chapter-title">Loading chapter...</h2>
           </div>
-          <!-- Quick Study Materials Dropdown / Direct Link Area -->
-          <div class="study-material-box" id="study-material-container">
-            <!-- Dynamically populated links for notes & formula sheets -->
+          
+          <!-- Study Materials Capsule -->
+          <div class="materials-wrapper">
+            <span class="materials-label"><i class="fa-solid fa-paperclip"></i> Quick Sheets:</span>
+            <div class="materials-links" id="materials-container">
+              <!-- Dynamically populated buttons -->
+            </div>
           </div>
         </div>
 
-        <!-- Quiz Container -->
-        <div class="quiz-container" id="quiz-container">
-          <div class="empty-state">
-            <i class="fa-solid fa-bolt text-teal"></i>
-            <p>Select any chapter from the list to start practicing high-yield questions.</p>
-          </div>
+        <!-- Questions Mount Point -->
+        <div class="questions-stream" id="questions-stream">
+          <!-- MCQs injected here -->
         </div>
 
       </section>
-
     </div>
   </main>
 
-  <!-- Simple Toast Popup -->
-  <div id="toast" class="toast hidden"></div>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast-popup hidden"></div>
 
+  <!-- Footer -->
   <footer class="footer">
-    <p>© 2026 Becules • Built for Last-Minute Scorers • Open & Free</p>
+    <div class="container footer-content">
+      <p class="footer-brand">Becules <span>//</span> Built by students of Ida Scudder School (Batch of 2028)</p>
+      <p class="footer-sub">Open-Source • Zero Ads • Free Forever</p>
+    </div>
   </footer>
 
   <script src="script.js"></script>
