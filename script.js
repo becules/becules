@@ -2,232 +2,254 @@
 let appData = null;
 let currentClass = 12;
 let currentChapterIdx = 0;
-let userAnswers = {}; // key: "chapterIdx_qIdx" -> { selected: int, isCorrect: bool }
+let answeredQuestions = {}; // Key: "class_chapterIdx_qIdx" -> { selected: index, isCorrect: bool }
+let sessionPoints = 0;
 
-// Run immediately on page load
+// Initialize on Load
 document.addEventListener("DOMContentLoaded", () => {
-  initRequestTracker();
-  loadQuestionsData();
+  initTheme();
+  initVotesTracker();
+  loadDatabase();
 });
 
-// 1. Fetch JSON Database
-async function loadQuestionsData() {
+// 1. THEME SWITCHER (Dark & Light Mode)
+function initTheme() {
+  const savedTheme = localStorage.getItem("becules_theme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("becules_theme", next);
+  showToast(`Switched to ${next.toUpperCase()} mode`);
+}
+
+// 2. LOAD QUESTIONS DATABASE
+async function loadDatabase() {
   try {
-    const res = await fetch('questions.json');
-    if (!res.ok) throw new Error("Could not load questions.json");
+    const res = await fetch("questions.json");
+    if (!res.ok) throw new Error("Could not find questions.json");
     appData = await res.json();
-    renderClassView();
+    renderClass();
   } catch (err) {
     console.error(err);
-    document.getElementById('quiz-container').innerHTML = `
-      <div class="empty-state">
-        <i class="fa-solid fa-triangle-exclamation" style="color: #f43f5e;"></i>
-        <p>Failed to load questions.json. Check browser console or ensure you run via a local server / GitHub Pages.</p>
+    document.getElementById("questions-stream").innerHTML = `
+      <div style="text-align:center; padding: 3rem 1rem;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size:2rem; color:#f43f5e; margin-bottom:1rem;"></i>
+        <p style="font-weight:700;">Failed to load questions.json</p>
+        <p style="font-size:0.8rem; color:var(--text-muted);">Ensure questions.json is in your root repository folder.</p>
       </div>`;
   }
 }
 
-// 2. Class Switch Handler
+// 3. CLASS TOGGLE (11 vs 12)
 function switchClass(cls) {
   currentClass = cls;
   currentChapterIdx = 0;
-  userAnswers = {};
 
-  document.getElementById('btn-cls-11').classList.toggle('active', cls === 11);
-  document.getElementById('btn-cls-12').classList.toggle('active', cls === 12);
+  document.getElementById("btn-11").classList.toggle("active", cls === 11);
+  document.getElementById("btn-12").classList.toggle("active", cls === 12);
 
-  renderClassView();
+  renderClass();
 }
 
-// 3. Render Chapters and Chapter Arena
-function renderClassView() {
+// 4. RENDER CHAPTERS SIDEBAR
+function renderClass() {
   if (!appData) return;
 
   const chapters = appData.physics[currentClass] || [];
-  const listContainer = document.getElementById('chapter-list');
-  document.getElementById('chapter-count').textContent = `${chapters.length} Chapters`;
+  const listEl = document.getElementById("chapter-list");
+  document.getElementById("total-chapters-tag").textContent = `${chapters.length} Chapters`;
 
-  listContainer.innerHTML = '';
-  chapters.forEach((ch, idx) => {
-    const btn = document.createElement('button');
-    btn.className = `chapter-btn ${idx === currentChapterIdx ? 'active' : ''}`;
+  listEl.innerHTML = "";
+  chapters.forEach((chap, idx) => {
+    const btn = document.createElement("button");
+    btn.className = `chapter-item-btn ${idx === currentChapterIdx ? "active" : ""}`;
     btn.innerHTML = `
-      <span>${idx + 1}. ${ch.title}</span>
-      <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem;"></i>
+      <span>${idx + 1}. ${chap.title}</span>
+      <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;"></i>
     `;
     btn.onclick = () => selectChapter(idx);
-    listContainer.appendChild(btn);
+    listEl.appendChild(btn);
   });
 
-  loadCurrentChapter();
+  renderChapterArena();
 }
 
 function selectChapter(idx) {
   currentChapterIdx = idx;
-  
-  // Update active sidebar item
-  const btns = document.querySelectorAll('.chapter-btn');
-  btns.forEach((b, i) => b.classList.toggle('active', i === idx));
 
-  loadCurrentChapter();
+  const allBtns = document.querySelectorAll(".chapter-item-btn");
+  allBtns.forEach((b, i) => b.classList.toggle("active", i === idx));
+
+  renderChapterArena();
 }
 
-// 4. Load Current Chapter Questions & Study Material Links
-function loadCurrentChapter() {
+// 5. RENDER ACTIVE CHAPTER & STUDY MATERIALS
+function renderChapterArena() {
   const chapter = appData.physics[currentClass][currentChapterIdx];
   if (!chapter) return;
 
-  document.getElementById('current-subject-tag').textContent = `PHYSICS • CLASS ${currentClass}`;
-  document.getElementById('current-chapter-title').textContent = chapter.title;
+  document.getElementById("current-badge").textContent = `PHYSICS • CLASS ${currentClass}`;
+  document.getElementById("current-chapter-title").textContent = chapter.title;
 
-  // Study Materials bar
-  const materialContainer = document.getElementById('study-material-container');
-  materialContainer.innerHTML = '';
-  
+  // Render Attached Study Material Links
+  const matContainer = document.getElementById("materials-container");
+  matContainer.innerHTML = "";
+
   if (chapter.materials && chapter.materials.length > 0) {
-    chapter.materials.forEach(mat => {
-      const link = document.createElement('a');
-      link.href = mat.url;
-      link.target = "_blank";
-      link.className = "material-link";
-      link.innerHTML = `<i class="${mat.icon || 'fa-solid fa-file-pdf'}"></i> ${mat.label}`;
-      materialContainer.appendChild(link);
+    chapter.materials.forEach((mat) => {
+      const a = document.createElement("a");
+      a.href = mat.url;
+      a.target = "_blank";
+      a.className = "doc-link";
+      a.innerHTML = `<i class="${mat.icon || "fa-solid fa-file-pdf"}"></i> ${mat.label}`;
+      matContainer.appendChild(a);
     });
   } else {
-    // Default placeholder for upcoming materials
-    materialContainer.innerHTML = `
-      <span class="material-link" style="opacity: 0.6; cursor: default;">
-        <i class="fa-solid fa-file-lines"></i> Formula Sheet (Coming Soon)
-      </span>
-    `;
+    matContainer.innerHTML = `
+      <span class="doc-link" style="opacity:0.6; cursor:default;">
+        <i class="fa-solid fa-clock"></i> Formula Sheet (Compiling)
+      </span>`;
   }
 
   // Render Questions
-  const quizContainer = document.getElementById('quiz-container');
-  quizContainer.innerHTML = '';
+  const stream = document.getElementById("questions-stream");
+  stream.innerHTML = "";
 
   chapter.questions.forEach((q, qIdx) => {
-    const qKey = `${currentChapterIdx}_${qIdx}`;
-    const answeredState = userAnswers[qKey];
+    const key = `${currentClass}_${currentChapterIdx}_${qIdx}`;
+    const state = answeredQuestions[key];
 
-    const qBlock = document.createElement('div');
-    qBlock.className = 'q-block';
+    const card = document.createElement("div");
+    card.className = "question-card";
 
-    let optionsHtml = '';
+    let optionsMarkup = "";
     q.options.forEach((opt, oIdx) => {
-      let extraClass = '';
-      let disabled = '';
+      let optionClass = "";
+      let disabledAttr = "";
 
-      if (answeredState) {
-        disabled = 'disabled';
-        if (oIdx === q.correct) extraClass = 'correct';
-        if (answeredState.selected === oIdx && !answeredState.isCorrect) extraClass = 'wrong';
+      if (state) {
+        disabledAttr = "disabled";
+        if (oIdx === q.correct) optionClass = "correct";
+        if (state.selected === oIdx && !state.isCorrect) optionClass = "wrong";
       }
 
-      optionsHtml += `
-        <button class="option-btn ${extraClass}" ${disabled} onclick="handleAnswer(${qIdx}, ${oIdx})">
+      optionsMarkup += `
+        <button class="option-choice ${optionClass}" ${disabledAttr} onclick="answerQuestion(${qIdx}, ${oIdx})">
           <span>${opt}</span>
-          ${answeredState && oIdx === q.correct ? '<i class="fa-solid fa-check"></i>' : ''}
-          ${answeredState && answeredState.selected === oIdx && !answeredState.isCorrect ? '<i class="fa-solid fa-xmark"></i>' : ''}
+          ${state && oIdx === q.correct ? '<i class="fa-solid fa-circle-check"></i>' : ""}
+          ${state && state.selected === oIdx && !state.isCorrect ? '<i class="fa-solid fa-circle-xmark"></i>' : ""}
         </button>
       `;
     });
 
-    let expHtml = '';
-    if (answeredState) {
-      expHtml = `
-        <div class="exp-box">
-          <strong>Instant Solution:</strong>
+    let solutionMarkup = "";
+    if (state) {
+      solutionMarkup = `
+        <div class="solution-box">
+          <strong>Key Concept & Solution:</strong>
           ${q.explanation}
         </div>
       `;
     }
 
-    qBlock.innerHTML = `
-      <div class="q-title"><strong>Q${qIdx + 1}.</strong> ${q.question}</div>
-      <div class="options-grid">${optionsHtml}</div>
-      ${expHtml}
+    card.innerHTML = `
+      <div class="question-text">
+        <span class="question-num">Q${qIdx + 1}.</span> ${q.question}
+      </div>
+      <div class="options-stack">${optionsMarkup}</div>
+      ${solutionMarkup}
     `;
 
-    quizContainer.appendChild(qBlock);
+    stream.appendChild(card);
   });
 
-  renderScoreSummary(chapter.questions.length);
+  renderSummary(chapter.questions.length);
 }
 
-// 5. Answer Selection Handler
-function handleAnswer(qIdx, selectedOptIdx) {
+// 6. ANSWER HANDLING WITH SCORE UPDATES
+function answerQuestion(qIdx, selectedIdx) {
   const chapter = appData.physics[currentClass][currentChapterIdx];
   const q = chapter.questions[qIdx];
-  const isCorrect = selectedOptIdx === q.correct;
-  const qKey = `${currentChapterIdx}_${qIdx}`;
+  const isCorrect = selectedIdx === q.correct;
+  const key = `${currentClass}_${currentChapterIdx}_${qIdx}`;
 
-  userAnswers[qKey] = {
-    selected: selectedOptIdx,
+  answeredQuestions[key] = {
+    selected: selectedIdx,
     isCorrect: isCorrect
   };
 
-  // Re-render chapter questions to display color feedback & explanation
-  loadCurrentChapter();
+  if (isCorrect) {
+    sessionPoints += 10;
+    showToast("Correct! +10 Points ⚡");
+  } else {
+    showToast("Incorrect. Check the breakdown below.");
+  }
+
+  document.getElementById("session-score").textContent = sessionPoints;
+  renderChapterArena();
 }
 
-// 6. Score Summary
-function renderScoreSummary(totalQuestions) {
+// 7. PROGRESS SUMMARY
+function renderSummary(total) {
   const chapter = appData.physics[currentClass][currentChapterIdx];
-  let answeredCount = 0;
-  let correctCount = 0;
+  let answered = 0;
+  let correct = 0;
 
   chapter.questions.forEach((_, qIdx) => {
-    const qKey = `${currentChapterIdx}_${qIdx}`;
-    if (userAnswers[qKey]) {
-      answeredCount++;
-      if (userAnswers[qKey].isCorrect) correctCount++;
+    const key = `${currentClass}_${currentChapterIdx}_${qIdx}`;
+    if (answeredQuestions[key]) {
+      answered++;
+      if (answeredQuestions[key].isCorrect) correct++;
     }
   });
 
-  if (answeredCount > 0) {
-    const quizContainer = document.getElementById('quiz-container');
-    const summary = document.createElement('div');
-    summary.className = 'score-summary-card';
+  if (answered > 0) {
+    const stream = document.getElementById("questions-stream");
+    const summary = document.createElement("div");
+    summary.className = "chapter-summary";
     summary.innerHTML = `
-      <h4>Chapter Progress: ${correctCount} / ${totalQuestions} Correct</h4>
-      <p>${correctCount === totalQuestions ? '🔥 Exam Ready! You nailed every concept.' : 'Review the concept explanations above and lock down weak spots.'}</p>
+      <h4>Accuracy: ${correct} / ${total} Correct</h4>
+      <p>${correct === total ? "🏆 Outstanding! You have full command of this chapter." : "Review the highlighted solutions to lock in your understanding."}</p>
     `;
-    quizContainer.appendChild(summary);
+    stream.appendChild(summary);
   }
 }
 
-// 7. Request Access & Upvote Tracker (Local Storage persistence)
-function initRequestTracker() {
-  const defaultVotes = { chemistry: 142, mathematics: 189 };
-  const storedVotes = JSON.parse(localStorage.getItem('becules_subject_votes')) || defaultVotes;
+// 8. SUBJECT REQUEST VOTE TRACKER
+function initVotesTracker() {
+  const initial = { chemistry: 168, mathematics: 214 };
+  const votes = JSON.parse(localStorage.getItem("becules_votes")) || initial;
 
-  document.getElementById('chem-votes').textContent = `${storedVotes.chemistry} requests`;
-  document.getElementById('math-votes').textContent = `${storedVotes.mathematics} requests`;
+  document.getElementById("chem-count").textContent = `${votes.chemistry} requests`;
+  document.getElementById("math-count").textContent = `${votes.mathematics} requests`;
 }
 
-function requestSubject(subj) {
+function registerVote(subj) {
   const hasVoted = localStorage.getItem(`voted_${subj}`);
   if (hasVoted) {
-    showToast(`You already requested access for ${subj.toUpperCase()}!`);
+    showToast(`You have already requested ${subj.toUpperCase()}!`);
     return;
   }
 
-  const defaultVotes = { chemistry: 142, mathematics: 189 };
-  const storedVotes = JSON.parse(localStorage.getItem('becules_subject_votes')) || defaultVotes;
+  const initial = { chemistry: 168, mathematics: 214 };
+  const votes = JSON.parse(localStorage.getItem("becules_votes")) || initial;
+  votes[subj] += 1;
 
-  storedVotes[subj] += 1;
-  localStorage.setItem('becules_subject_votes', JSON.stringify(storedVotes));
-  localStorage.setItem(`voted_${subj}`, 'true');
+  localStorage.setItem("becules_votes", JSON.stringify(votes));
+  localStorage.setItem(`voted_${subj}`, "true");
 
-  initRequestTracker();
-  showToast(`Request submitted! We'll prioritize ${subj.toUpperCase()}.`);
+  initVotesTracker();
+  showToast(`Vote recorded! ${subj.toUpperCase()} access priority bumped up.`);
 }
 
-// 8. Toast Helper
+// 9. TOAST NOTIFICATION
 function showToast(msg) {
-  const toast = document.getElementById('toast');
+  const toast = document.getElementById("toast");
   toast.textContent = msg;
-  toast.classList.remove('hidden');
-  setTimeout(() => toast.classList.add('hidden'), 3000);
+  toast.classList.remove("hidden");
+  setTimeout(() => toast.classList.add("hidden"), 2800);
 }
