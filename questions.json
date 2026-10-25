@@ -1,0 +1,88 @@
+{
+  "physics": {
+    "11": [
+      {
+        "title": "Units & Measurements",
+        "materials": [
+          { "label": "Dimensions Cheat-Sheet", "url": "#", "icon": "fa-solid fa-file-pdf" }
+        ],
+        "questions": [
+          {
+            "question": "What is the dimensional formula of Universal Gravitational Constant (G)?",
+            "options": [
+              "[M⁻¹ L³ T⁻²]",
+              "[M¹ L² T⁻²]",
+              "[M⁻² L³ T⁻¹]",
+              "[M¹ L³ T⁻²]"
+            ],
+            "correct": 0,
+            "explanation": "From Newton's law, F = G(m₁m₂)/r² => G = Fr²/(m₁m₂).\nSubstituting dimensions: [M L T⁻²][L²] / [M²] = [M⁻¹ L³ T⁻²]."
+          }
+        ]
+      }
+    ],
+    "12": [
+      {
+        "title": "Electric Charges and Fields",
+        "materials": [
+          { "label": "Gauss Law 2-Min Summary", "url": "#", "icon": "fa-solid fa-file-pdf" },
+          { "label": "Formula Cheatsheet", "url": "#", "icon": "fa-solid fa-bolt" }
+        ],
+        "questions": [
+          {
+            "question": "A electric dipole of moment p is placed in a uniform electric field E. The torque experienced by it is maximum when the angle between p and E is:",
+            "options": [
+              "0°",
+              "45°",
+              "90°",
+              "180°"
+            ],
+            "correct": 2,
+            "explanation": "Torque is given by τ = p × E = pE sin(θ).\nThe function sin(θ) achieves its maximum value of 1 when θ = 90°."
+          },
+          {
+            "question": "What is the SI unit of electric flux?",
+            "options": [
+              "N / C",
+              "N m² / C",
+              "V / m",
+              "J / C"
+            ],
+            "correct": 1,
+            "explanation": "Electric flux Φ = E · A = (Force / Charge) × Area.\nThus, Unit = (N/C) × m² = N m² / C (also equivalent to Volt-meter)."
+          },
+          {
+            "question": "If the radius of a Gaussian surface enclosing a single charge is halved, how does the total outward flux change?",
+            "options": [
+              "It is doubled",
+              "It is halved",
+              "It is quadrupled",
+              "It remains unchanged"
+            ],
+            "correct": 3,
+            "explanation": "According to Gauss's Law, Φ = Q_enclosed / ε₀.\nThe flux depends strictly on enclosed charge, independent of the surface's size or shape."
+          }
+        ]
+      },
+      {
+        "title": "Current Electricity",
+        "materials": [
+          { "label": "Kirchhoff Rules Rapid Guide", "url": "#", "icon": "fa-solid fa-file-pdf" }
+        ],
+        "questions": [
+          {
+            "question": "Two resistors of resistance 3 Ω and 6 Ω are connected in parallel to a 6V source. The total current drawn from the source is:",
+            "options": [
+              "1 A",
+              "2 A",
+              "3 A",
+              "9 A"
+            ],
+            "correct": 2,
+            "explanation": "Equivalent resistance R_eq = (3 × 6) / (3 + 6) = 2 Ω.\nBy Ohm's law, total current I = V / R_eq = 6V / 2Ω = 3 A."
+          }
+        ]
+      }
+    ]
+  }
+}
