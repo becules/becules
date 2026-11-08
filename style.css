@@ -1,7 +1,7 @@
 /* Custom Scrollbars */
 .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
     background-color: #cbd5e1;
@@ -16,24 +16,19 @@
     transition: all 0.15s ease-in-out;
 }
 .mcq-option:hover:not(:disabled) {
-    transform: translateX(4px);
+    transform: translateX(3px);
 }
 
 /* Green & Red Correctness Highlights */
 .mcq-option.correct {
-    background-color: rgba(16, 185, 129, 0.12) !important;
+    background-color: rgba(16, 185, 129, 0.15) !important;
     border-color: #10b981 !important;
     color: #10b981 !important;
     font-weight: 700;
 }
 .mcq-option.wrong {
-    background-color: rgba(244, 63, 94, 0.12) !important;
+    background-color: rgba(244, 63, 94, 0.15) !important;
     border-color: #f43f5e !important;
     color: #f43f5e !important;
     font-weight: 700;
-}
-
-/* Subtle glow for night mode cramming */
-[data-theme="dark"] .glow-card {
-    box-shadow: 0 0 25px -5px rgba(20, 184, 166, 0.1);
 }
