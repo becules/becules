@@ -1,18 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <!-- Supabase Client CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- App JavaScript -->
-    <script src="script.js"></script>
-</body>
-</html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Becules • Last-Minute ISC Physics Prep</title>
 
-    <!-- Tailwind CSS (CDN) -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -39,11 +32,13 @@
         }
     </script>
 
-    <!-- Font Awesome & Google Fonts -->
+    <!-- Icons & Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- External Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-slate-50 dark:bg-[#090d16] text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200 antialiased">
@@ -69,8 +64,8 @@
                     <button id="nav-about" onclick="navigateTo('about')" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition">About Us</button>
                     <button id="nav-contribute" onclick="navigateTo('contribute')" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition">Contribute</button>
                     
-                    <!-- Theme Toggle Button -->
-                    <button onclick="toggleTheme()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Toggle Theme" aria-label="Toggle Theme">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Toggle Theme">
                         <i id="theme-icon" class="fa-solid fa-moon text-base"></i>
                     </button>
                 </nav>
@@ -97,11 +92,9 @@
     </header>
 
     <!-- Main Dynamic Content Region -->
-    <main id="main-content" class="flex-grow">
-        <!-- Rendered by script.js -->
-    </main>
+    <main id="main-content" class="flex-grow"></main>
 
-    <!-- Floating Toast Notification -->
+    <!-- Toast Popup Notification -->
     <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-lg text-xs font-semibold flex items-center space-x-2 transition-all">
         <span id="toast-message">Notification</span>
     </div>
@@ -116,6 +109,7 @@
         </div>
     </footer>
 
+    <!-- App JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
