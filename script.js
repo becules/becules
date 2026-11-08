@@ -1,4 +1,11 @@
-// Application State
+// --- SUPABASE CONFIGURATION ---
+const SUPABASE_URL = "https://kfsbjxvrewtinwssjarq.supabase.co/rest/v1/"; // Paste your Project URL here
+const SUPABASE_ANON_KEY = "sb_publishable_KkWW2xH5c49W16MQG72Vgw_WLiP9Nps"; // Paste your anon public key here
+
+// Initialize the Supabase Client
+const supabase = (typeof window.supabase !== 'undefined' && SUPABASE_URL !== "YOUR_SUPABASE_PROJECT_URL") 
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
+    : null;// Application State
 const state = {
     currentPage: 'home',
     selectedClass: 12,
@@ -495,56 +502,92 @@ function recordAnswer(qIdx, optIdx) {
 }
 
 // -----------------------------------------------------------------------------
-// 6. Request Access Tracker (Starts at 0, Increments cleanly)
+// 6. Request Access Tracker (Live Supabase Sync, starts at 0)
 // -----------------------------------------------------------------------------
-function initRequestVotes() {
-    const votes = getVotes();
+async function initRequestVotes() {
+    // If Supabase is connected, fetch live counts from cloud
+    if (supabase) {
+        try {
+            const { data, error } = await supabase.from('subject_requests').select('*');
+            if (data && !error) {
+                data.forEach(row => {
+                    const el = document.getElementById(`vote-count-${row.subject}`);
+                    if (el) el.textContent = `${row.votes} requests`;
+                });
+                return;
+            }
+        } catch (e) {
+            console.error("Supabase fetch failed, falling back to local:", e);
+        }
+    }
+
+    // Local fallback if Supabase keys are not set yet
+    const votes = JSON.parse(localStorage.getItem('becules_subject_votes')) || { chemistry: 0, mathematics: 0 };
     const chemEl = document.getElementById('vote-count-chemistry');
     const mathEl = document.getElementById('vote-count-mathematics');
-
     if (chemEl) chemEl.textContent = `${votes.chemistry} requests`;
     if (mathEl) mathEl.textContent = `${votes.mathematics} requests`;
 }
 
-function getVotes() {
-    // Strictly starts at 0 for each subject
-    const saved = localStorage.getItem('becules_subject_votes');
-    return saved ? JSON.parse(saved) : { chemistry: 0, mathematics: 0 };
-}
-
-function requestSubjectVote(subj) {
+async function requestSubjectVote(subj) {
     const votedKey = `becules_voted_${subj}`;
+    
+    // Prevent double voting from the same browser
     if (localStorage.getItem(votedKey)) {
         showToast(`You have already requested ${subj.toUpperCase()}!`);
         return;
     }
 
-    const votes = getVotes();
-    votes[subj] = (votes[subj] || 0) + 1;
+    if (supabase) {
+        // Call the database function to add +1
+        const { error } = await supabase.rpc('increment_subject_vote', { sub_name: subj });
+        if (!error) {
+            localStorage.setItem(votedKey, 'true');
+            showToast(`Vote recorded! We'll prioritize ${subj.toUpperCase()}.`);
+            initRequestVotes();
+            return;
+        }
+    }
 
+    // Local fallback if offline
+    const votes = JSON.parse(localStorage.getItem('becules_subject_votes')) || { chemistry: 0, mathematics: 0 };
+    votes[subj] = (votes[subj] || 0) + 1;
     localStorage.setItem('becules_subject_votes', JSON.stringify(votes));
     localStorage.setItem(votedKey, 'true');
-
     initRequestVotes();
-    showToast(`Request counted! We will prioritize ${subj.toUpperCase()}.`);
+    showToast(`Vote recorded! We'll prioritize ${subj.toUpperCase()}.`);
 }
 
 // -----------------------------------------------------------------------------
-// 7. Utilities (Toast & Form Handlers)
+// 7. Request Access Tracker (Live Supabase Sync, starts at 0)
 // -----------------------------------------------------------------------------
-function handleContributionSubmit(e) {
+
+
+async function handleContributionSubmit(e) {
     e.preventDefault();
+    const form = e.target;
+    
+    const contributorName = form.querySelector('input[type="text"]').value || "Anonymous";
+    const subject = form.querySelectorAll('select')[0].value;
+    const classLevel = form.querySelectorAll('select')[1].value;
+    const materialTitle = form.querySelectorAll('input[type="text"]')[1].value;
+
+    if (supabase) {
+        const { error } = await supabase.from('contributions').insert([
+            {
+                contributor_name: contributorName,
+                subject: subject,
+                class_level: classLevel,
+                material_title: materialTitle
+            }
+        ]);
+
+        if (error) {
+            console.error("Supabase insert error:", error);
+        }
+    }
+
     showToast("Thank you! Contribution received for review.");
-    e.target.reset();
+    form.reset();
 }
 
-function showToast(msg) {
-    const toast = document.getElementById('toast');
-    const text = document.getElementById('toast-message');
-    if (!toast || !text) return;
-    text.textContent = msg;
-    toast.classList.remove('hidden');
-    setTimeout(() => {
-        toast.classList.add('hidden');
-    }, 2800);
-}
