@@ -1,20 +1,11 @@
 // =============================================================================
-// SUPABASE CREDENTIALS (Pre-configured)
+// 1. SUPABASE KEYS & ENDPOINTS (Pre-configured)
 // =============================================================================
-const SUPABASE_URL = "https://kfsbjxvrewtinwssjarq.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_KkWW2xH5c49W16MQG72Vgw_WLiP9Nps";
-
-let supabase = null;
-try {
-    if (typeof window.supabase !== 'undefined') {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    }
-} catch (e) {
-    console.warn("Supabase connection fallback to local storage:", e);
-}
+const SUPABASE_BASE_URL = "https://kfsbjxvrewtinwssjarq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_KkWW2xH5c49W16MQG72Vgw_WLiP9Nps";
 
 // =============================================================================
-// APPLICATION STATE
+// 2. APPLICATION STATE
 // =============================================================================
 const state = {
     currentPage: 'home',
@@ -25,110 +16,17 @@ const state = {
     curriculumData: null
 };
 
-// Fallback questions to guarantee the site NEVER opens to a blank screen
-const fallbackCurriculum = {
-    physics: {
-        11: [
-            {
-                title: "Units and Measurement",
-                summary: "Focus heavily on dimensional formulas of constants (G, h, η, permeability) and propagation of percentage errors (ΔZ/Z = a·ΔA/A + b·ΔB/B).",
-                materials: [
-                    { label: "Dimensions & Constants Cheat Sheet (PDF)", url: "#", icon: "fa-solid fa-file-pdf" },
-                    { label: "Error Analysis 1-Page Summary", url: "#", icon: "fa-solid fa-bolt" }
-                ],
-                questions: [
-                    {
-                        question: "What is the dimensional formula for Gravitational Constant (G)?",
-                        options: ["[M⁻¹ L³ T⁻²]", "[M¹ L² T⁻²]", "[M⁻² L³ T⁻¹]", "[M¹ L³ T⁻²]"],
-                        correct: 0,
-                        explanation: "From F = G(m₁m₂)/r², G = F·r²/(m₁m₂). Substituting dimensions: [M L T⁻²][L²] / [M²] = [M⁻¹ L³ T⁻²]."
-                    },
-                    {
-                        question: "If error in measuring mass is 2% and velocity is 3%, maximum error in calculated Kinetic Energy is:",
-                        options: ["5%", "8%", "11%", "12%"],
-                        correct: 1,
-                        explanation: "K = (1/2)mv². Error ΔK/K = (Δm/m) + 2(Δv/v) = 2% + 2(3%) = 8%."
-                    }
-                ]
-            },
-            {
-                title: "Laws of Motion",
-                summary: "Master Free Body Diagrams (FBD), impulse J = Δp = F·Δt, apparent weight in elevators, and limiting friction f_max = μ_s · N.",
-                materials: [
-                    { label: "Friction & Pulley Formulas (PDF)", url: "#", icon: "fa-solid fa-file-pdf" }
-                ],
-                questions: [
-                    {
-                        question: "A 2kg block rests on a rough floor (μs = 0.4). If a 5N horizontal force is applied, static friction is:",
-                        options: ["7.84 N", "5 N", "0 N", "2 N"],
-                        correct: 1,
-                        explanation: "Limiting friction f_max = μs·m·g = 0.4 × 2 × 9.8 = 7.84 N. Since applied force (5N) < limiting friction, static friction self-adjusts to equal 5 N."
-                    }
-                ]
-            }
-        ],
-        12: [
-            {
-                title: "Electric Charges and Fields",
-                summary: "Crucial topics: Coulomb's Law in vector form, torque on dipole (τ = p × E), potential energy (U = -p · E), and Gauss's Law applications for wire, infinite plane sheet, and shell.",
-                materials: [
-                    { label: "Gauss Law Derivations Summary (PDF)", url: "#", icon: "fa-solid fa-file-pdf" },
-                    { label: "Dipole Formulas Quick Sheet", url: "#", icon: "fa-solid fa-bolt" }
-                ],
-                questions: [
-                    {
-                        question: "An electric dipole of moment p is placed in a uniform field E. Torque is maximum when angle between p and E is:",
-                        options: ["0°", "45°", "90°", "180°"],
-                        correct: 2,
-                        explanation: "Torque is τ = pE sin(θ). The sine function attains its maximum value of 1 when θ = 90°."
-                    },
-                    {
-                        question: "What is the SI unit of electric flux (Φ)?",
-                        options: ["N / C", "N m² / C", "V / m", "J / C"],
-                        correct: 1,
-                        explanation: "Flux Φ = E · A = (Force / Charge) × Area = (N / C) × m² = N m² / C (also equivalent to Volt·meter)."
-                    },
-                    {
-                        question: "If radius of a Gaussian sphere enclosing a point charge is doubled, total electric flux:",
-                        options: ["Halves", "Doubles", "Remains unchanged", "Quadruples"],
-                        correct: 2,
-                        explanation: "By Gauss's Law, Φ = Q_enclosed / ε₀. Flux depends strictly on net enclosed charge, not the surface radius."
-                    }
-                ]
-            },
-            {
-                title: "Current Electricity",
-                summary: "High-probability: Drift velocity (I = n·e·A·v_d), temperature coefficient of resistance, Kirchhoff's Junction & Loop rules, and Wheatstone bridge condition.",
-                materials: [
-                    { label: "Kirchhoff Rules & Bridge Circuit Handout (PDF)", url: "#", icon: "fa-solid fa-file-pdf" }
-                ],
-                questions: [
-                    {
-                        question: "Two resistors of 3 Ω and 6 Ω are in parallel across an ideal 6V battery. Total current drawn is:",
-                        options: ["1 A", "2 A", "3 A", "9 A"],
-                        correct: 2,
-                        explanation: "Parallel resistance R_eq = (3 × 6)/(3 + 6) = 2 Ω. Current I = V / R_eq = 6V / 2Ω = 3 A."
-                    }
-                ]
-            }
-        ]
-    }
-};
-
 // =============================================================================
-// INITIALIZATION (Renders immediately so screen is NEVER blank)
+// 3. INITIALIZATION
 // =============================================================================
 document.addEventListener("DOMContentLoaded", () => {
     initTheme();
-    state.curriculumData = fallbackCurriculum; // Default to fallback immediately
-    renderMain();                              // Show page instantly
-    loadCurriculum();                          // Fetch questions.json in background
-    initRequestVotes();                        // Sync votes with Supabase
+    renderMain();        // Render UI instantly so page is never blank
+    loadQuestionsJson(); // Fetch curriculum data
+    initRequestVotes();  // Connect to Supabase for vote count
 });
 
-// -----------------------------------------------------------------------------
-// 1. Theme Toggle System
-// -----------------------------------------------------------------------------
+// Theme Toggle
 function initTheme() {
     const saved = localStorage.getItem('becules_theme') || 'dark';
     document.documentElement.setAttribute('data-theme', saved);
@@ -152,27 +50,21 @@ function updateThemeIcons(isDark) {
     if (mobIcon) mobIcon.className = cls;
 }
 
-// -----------------------------------------------------------------------------
-// 2. Fetch Curriculum & Questions (questions.json)
-// -----------------------------------------------------------------------------
-async function loadCurriculum() {
+// Fetch questions.json
+async function loadQuestionsJson() {
     try {
         const res = await fetch('questions.json');
-        if (res.ok) {
-            const data = await res.json();
-            if (data && data.physics) {
-                state.curriculumData = data;
-                if (state.currentPage === 'resources') renderMain();
-            }
+        if (!res.ok) throw new Error("Could not find questions.json");
+        state.curriculumData = await res.json();
+        if (state.currentPage === 'resources') {
+            renderMain();
         }
     } catch (err) {
-        console.warn("Using built-in curriculum data:", err);
+        console.warn("Notice: questions.json not loaded yet.", err);
     }
 }
 
-// -----------------------------------------------------------------------------
-// 3. Navigation
-// -----------------------------------------------------------------------------
+// Navigation
 function navigateTo(page) {
     state.currentPage = page;
     updateNavUI();
@@ -196,9 +88,9 @@ function toggleMobileMenu() {
     document.getElementById('mobile-menu').classList.toggle('hidden');
 }
 
-// -----------------------------------------------------------------------------
-// 4. Page View Renderers
-// -----------------------------------------------------------------------------
+// =============================================================================
+// 4. VIEW RENDERERS
+// =============================================================================
 function renderMain() {
     const container = document.getElementById('main-content');
     if (!container) return;
@@ -215,7 +107,7 @@ function renderMain() {
     }
 }
 
-// --- HOME PAGE ---
+// HOME PAGE
 function renderHomePage() {
     return `
         <div class="max-w-5xl mx-auto px-4 py-12 sm:py-16">
@@ -230,7 +122,7 @@ function renderHomePage() {
             </h1>
 
             <p class="text-slate-600 dark:text-slate-400 mt-4 text-base sm:text-lg max-w-2xl leading-relaxed">
-                Skip long textbook explanations. Pick your chapter, skim the high-yield formula cheat sheet, and test yourself on high-probability exam questions in under 15 minutes.
+                Skip long textbook manuals. Pick your chapter, skim the high-yield formula cheat sheet, and test yourself on high-probability exam questions in under 15 minutes.
             </p>
 
             <div class="mt-8 flex flex-wrap gap-4">
@@ -243,13 +135,13 @@ function renderHomePage() {
                 </button>
             </div>
 
-            <!-- Subject Cards & Request Access Block -->
+            <!-- Subject Cards & Request Tracker -->
             <div class="mt-14">
                 <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-4">Choose Your Subject</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     
                     <!-- Physics Card (Live) -->
-                    <div onclick="navigateTo('resources')" class="p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-teal-500/70 shadow-sm hover:border-teal-500 cursor-pointer transition group glow-card">
+                    <div onclick="navigateTo('resources')" class="p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-teal-500/70 shadow-sm hover:border-teal-500 cursor-pointer transition group">
                         <div class="flex items-center justify-between">
                             <div class="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 flex items-center justify-center text-lg font-bold">
                                 <i class="fa-solid fa-atom"></i>
@@ -262,7 +154,7 @@ function renderHomePage() {
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Full Class 11 & 12 formula sheets and concept questions.</p>
                     </div>
 
-                    <!-- Chemistry Card (Locked with Live Supabase Counter) -->
+                    <!-- Chemistry Card (Supabase Counter starts at 0) -->
                     <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between">
@@ -285,7 +177,415 @@ function renderHomePage() {
                         </div>
                     </div>
 
-                    <!-- Mathematics Card (Locked with Live Supabase Counter) -->
+                    <!-- Mathematics Card (Supabase Counter starts at 0) -->
                     <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
                         <div>
-                            <div
+                            <div class="flex items-center justify-between">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-500 flex items-center justify-center text-lg font-bold">
+                                    <i class="fa-solid fa-calculator"></i>
+                                </div>
+                                <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500">
+                                    In Queue
+                                </span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white mt-3">Mathematics</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Calculus rules, vector shortcuts, and high-probability problem sets.</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <button onclick="requestSubjectVote('mathematics')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-teal-950 hover:text-teal-700 transition flex items-center space-x-1.5">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                                <span>Request Access</span>
+                            </button>
+                            <span id="vote-count-mathematics" class="font-mono text-xs font-bold text-slate-500">0 requests</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// RESOURCES PAGE (Direct Chapter Selector + Notes & MCQs)
+function renderResourcesPage() {
+    const chapters = (state.curriculumData && state.curriculumData.physics && state.curriculumData.physics[state.selectedClass]) || [];
+    const activeChapter = chapters[state.selectedChapterIdx] || chapters[0] || { title: "Loading Chapter...", questions: [], materials: [] };
+
+    return `
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <!-- Class Switcher -->
+                <div class="inline-flex p-1 rounded-xl bg-slate-200 dark:bg-slate-800 select-none">
+                    <button onclick="selectClass(11)" class="px-4 py-1.5 rounded-lg text-xs font-bold transition ${state.selectedClass === 11 ? 'bg-white dark:bg-slate-900 text-teal-700 dark:text-teal-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}">
+                        Class XI
+                    </button>
+                    <button onclick="selectClass(12)" class="px-4 py-1.5 rounded-lg text-xs font-bold transition ${state.selectedClass === 12 ? 'bg-white dark:bg-slate-900 text-teal-700 dark:text-teal-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'}">
+                        Class XII
+                    </button>
+                </div>
+
+                <div class="text-xs text-slate-500 dark:text-slate-400">
+                    <i class="fa-solid fa-clock text-amber-500 mr-1"></i> High-yield formulas and concept questions
+                </div>
+            </div>
+
+            <!-- Two-Column Workspace -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Sidebar: Chapter List -->
+                <aside class="lg:col-span-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Physics Chapters</span>
+                        <span class="text-xs font-bold text-teal-600 dark:text-teal-400">${chapters.length} Total</span>
+                    </div>
+
+                    <div class="space-y-1.5 max-h-[580px] overflow-y-auto custom-scrollbar pr-1">
+                        ${chapters.map((ch, idx) => `
+                            <button onclick="selectChapter(${idx})" class="w-full text-left p-3 rounded-xl text-xs font-bold transition flex items-center justify-between ${idx === state.selectedChapterIdx ? 'bg-teal-50 dark:bg-teal-950/70 border border-teal-500 text-teal-800 dark:text-teal-300' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 border border-transparent'}">
+                                <span class="truncate pr-2">${idx + 1}. ${ch.title}</span>
+                                <i class="fa-solid fa-chevron-right text-[10px] opacity-40"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+                </aside>
+
+                <!-- Main Arena: Notes & Quizzes -->
+                <section class="lg:col-span-8 space-y-6">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+                                Chapter ${state.selectedChapterIdx + 1} • Class ${state.selectedClass}
+                            </span>
+                            
+                            <!-- Tab Switcher -->
+                            <div class="flex space-x-2 text-xs font-bold">
+                                <button onclick="setTab('notes')" class="px-3 py-1.5 rounded-lg border transition ${state.activeTab === 'notes' ? 'bg-teal-700 text-white border-teal-700' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-transparent'}">
+                                    <i class="fa-solid fa-book-open mr-1"></i> Revision Notes
+                                </button>
+                                <button onclick="setTab('quiz')" class="px-3 py-1.5 rounded-lg border transition ${state.activeTab === 'quiz' ? 'bg-teal-700 text-white border-teal-700' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-transparent'}">
+                                    <i class="fa-solid fa-circle-question mr-1"></i> Practice MCQs (${activeChapter.questions ? activeChapter.questions.length : 0})
+                                </button>
+                            </div>
+                        </div>
+
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-2">
+                            ${activeChapter.title}
+                        </h2>
+
+                        <!-- TAB 1: REVISION NOTES -->
+                        ${state.activeTab === 'notes' ? `
+                            <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                                <div class="p-4 rounded-xl bg-teal-50/70 dark:bg-teal-950/40 border border-teal-100 dark:border-teal-900/60">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-teal-900 dark:text-teal-200 mb-1">
+                                        <i class="fa-solid fa-lightbulb mr-1"></i> High-Yield Concept & Formula Summary
+                                    </h4>
+                                    <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                                        ${activeChapter.summary || "Summary notes are ready. Check attached documents below for quick download."}
+                                    </p>
+                                </div>
+
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mt-4">Attached Chapter Resources</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                                    ${(activeChapter.materials || []).map(mat => `
+                                        <a href="${mat.url}" target="_blank" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-400 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-200 transition group">
+                                            <span class="flex items-center space-x-2">
+                                                <i class="${mat.icon || 'fa-solid fa-file-pdf'} text-teal-600 dark:text-teal-400"></i>
+                                                <span>${mat.label}</span>
+                                            </span>
+                                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-400 group-hover:text-teal-500"></i>
+                                        </a>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- TAB 2: LIVE MCQS -->
+                        ${state.activeTab === 'quiz' ? `
+                            <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
+                                ${(activeChapter.questions || []).map((q, qIdx) => {
+                                    const key = `${state.selectedClass}_${state.selectedChapterIdx}_${qIdx}`;
+                                    const answered = state.userAnswers[key];
+
+                                    return `
+                                        <div class="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 space-y-3">
+                                            <div class="text-sm font-bold text-slate-900 dark:text-white leading-relaxed">
+                                                <span class="text-teal-600 dark:text-teal-400 mr-1.5 font-mono">Q${qIdx + 1}.</span> ${q.question}
+                                            </div>
+
+                                            <div class="space-y-2 mt-3">
+                                                ${q.options.map((opt, oIdx) => {
+                                                    let stateClass = "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:border-teal-500";
+                                                    let iconMarkup = "";
+
+                                                    if (answered) {
+                                                        if (oIdx === q.correct) {
+                                                            stateClass = "correct";
+                                                            iconMarkup = '<i class="fa-solid fa-check text-xs"></i>';
+                                                        } else if (answered.selected === oIdx && !answered.isCorrect) {
+                                                            stateClass = "wrong";
+                                                            iconMarkup = '<i class="fa-solid fa-xmark text-xs"></i>';
+                                                        }
+                                                    }
+
+                                                    return `
+                                                        <button 
+                                                            ${answered ? 'disabled' : ''} 
+                                                            onclick="recordAnswer(${qIdx}, ${oIdx})" 
+                                                            class="mcq-option w-full text-left p-3 rounded-xl border text-xs font-medium flex items-center justify-between ${stateClass}">
+                                                            <span>${opt}</span>
+                                                            ${iconMarkup}
+                                                        </button>
+                                                    `;
+                                                }).join('')}
+                                            </div>
+
+                                            ${answered ? `
+                                                <div class="mt-3 p-3.5 rounded-xl bg-teal-50/70 dark:bg-teal-950/40 border border-teal-200/60 dark:border-teal-900 text-xs text-slate-700 dark:text-slate-300">
+                                                    <strong class="text-teal-800 dark:text-teal-300 block mb-0.5 uppercase tracking-wide text-[10px]">Exam Tip & Concept:</strong>
+                                                    ${q.explanation}
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        ` : ''}
+
+                    </div>
+                </section>
+            </div>
+        </div>
+    `;
+}
+
+// ABOUT PAGE
+function renderAboutPage() {
+    return `
+        <div class="max-w-3xl mx-auto px-4 py-12">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">About Becules</h1>
+                <p class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider mt-1">
+                    OPEN SOURCE • NOT FOR PROFIT • LAST-MINUTE FOCUSED
+                </p>
+
+                <p class="text-sm text-slate-600 dark:text-slate-300 mt-4 leading-relaxed">
+                    Becules is a free learning hub created for ISC Class 11 & 12 students who need high-yield preparation without the clutter. During exam nights, nobody has time to read 80-page reference manuals. We break down the syllabus into straight-to-the-point formula sheets, high-frequency MCQs, and clear step-by-step solutions.
+                </p>
+
+                <div class="mt-6 p-4 rounded-xl bg-teal-50/60 dark:bg-teal-950/40 border border-teal-100 dark:border-teal-900 text-xs text-slate-700 dark:text-slate-300">
+                    <p class="font-bold text-teal-900 dark:text-teal-200 mb-1"><i class="fa-solid fa-graduation-cap mr-1"></i> Student-Created Project</p>
+                    Built by students from <strong>Ida Scudder School (ISC Batch of 2028)</strong>—learning from the same syllabus, facing the same board expectations, and solving real exam prep bottlenecks together.
+                </div>
+
+                <ul class="mt-6 space-y-3 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    <li class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check text-teal-600 dark:text-teal-400"></i>
+                        <span><strong>Zero paywalls</strong>, subscriptions, or login walls.</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check text-teal-600 dark:text-teal-400"></i>
+                        <span><strong>No distracting animations</strong>—clean and easy on tired eyes.</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check text-teal-600 dark:text-teal-400"></i>
+                        <span><strong>Community driven</strong>: Submit your own handwritten summaries to help peers.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+// CONTRIBUTE PAGE
+function renderContributePage() {
+    return `
+        <div class="max-w-2xl mx-auto px-4 py-12">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">Contribute Notes & Questions</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Have high-scoring handwritten formula sheets or solved board questions? Share them with fellow ISC students.</p>
+
+                <form onsubmit="handleContributionSubmit(event)" class="mt-6 space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Your Name (or Anonymous)</label>
+                        <input type="text" placeholder="e.g. Rahul S." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Subject</label>
+                            <select class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <option>Physics</option>
+                                <option>Chemistry</option>
+                                <option>Mathematics</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Class</label>
+                            <select class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <option>Class 11</option>
+                                <option>Class 12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Resource Title / Topic</label>
+                        <input type="text" required placeholder="e.g. Current Electricity - Kirchhoff Laws summary" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Attach File (PDF, DOCX, Images)</label>
+                        <input type="file" required class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 dark:file:bg-teal-950 dark:file:text-teal-300 cursor-pointer border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800">
+                    </div>
+
+                    <button type="submit" class="w-full py-3 rounded-xl font-bold text-xs text-white bg-teal-700 hover:bg-teal-800 transition shadow-sm">
+                        Submit Contribution
+                    </button>
+                </form>
+            </div>
+        </div>
+    `;
+}
+
+// User Actions
+function selectClass(cls) {
+    state.selectedClass = cls;
+    state.selectedChapterIdx = 0;
+    renderResourcesPage();
+}
+
+function selectChapter(idx) {
+    state.selectedChapterIdx = idx;
+    renderResourcesPage();
+}
+
+function setTab(tabName) {
+    state.activeTab = tabName;
+    renderResourcesPage();
+}
+
+function recordAnswer(qIdx, optIdx) {
+    const chapters = state.curriculumData.physics[state.selectedClass];
+    const q = chapters[state.selectedChapterIdx].questions[qIdx];
+    const key = `${state.selectedClass}_${state.selectedChapterIdx}_${qIdx}`;
+
+    state.userAnswers[key] = {
+        selected: optIdx,
+        isCorrect: optIdx === q.correct
+    };
+
+    if (optIdx === q.correct) {
+        showToast("Correct! Check the concept tip below.");
+    } else {
+        showToast("Incorrect. Read the explanation below.");
+    }
+
+    renderResourcesPage();
+}
+
+// =============================================================================
+// 5. SUPABASE CLOUD SYNC (Crash-Proof Native Fetch)
+// =============================================================================
+async function initRequestVotes() {
+    try {
+        const res = await fetch(`${SUPABASE_BASE_URL}/rest/v1/subject_requests?select=*`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data && data.length > 0) {
+                data.forEach(row => {
+                    const el = document.getElementById(`vote-count-${row.subject}`);
+                    if (el) el.textContent = `${row.votes} requests`;
+                });
+                return;
+            }
+        }
+    } catch (e) {
+        console.warn("Supabase fetch using local fallback:", e);
+    }
+
+    // Local fallback if Supabase table is empty
+    const votes = JSON.parse(localStorage.getItem('becules_subject_votes')) || { chemistry: 0, mathematics: 0 };
+    const chemEl = document.getElementById('vote-count-chemistry');
+    const mathEl = document.getElementById('vote-count-mathematics');
+    if (chemEl) chemEl.textContent = `${votes.chemistry || 0} requests`;
+    if (mathEl) mathEl.textContent = `${votes.mathematics || 0} requests`;
+}
+
+async function requestSubjectVote(subj) {
+    const votedKey = `becules_voted_${subj}`;
+    if (localStorage.getItem(votedKey)) {
+        showToast(`You have already requested ${subj.toUpperCase()}!`);
+        return;
+    }
+
+    try {
+        const res = await fetch(`${SUPABASE_BASE_URL}/rest/v1/rpc/increment_subject_vote`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ sub_name: subj })
+        });
+        if (res.ok) {
+            localStorage.setItem(votedKey, 'true');
+            showToast(`Vote recorded! We'll prioritize ${subj.toUpperCase()}.`);
+            initRequestVotes();
+            return;
+        }
+    } catch (e) {
+        console.warn("Supabase increment error:", e);
+    }
+
+    // Local fallback
+    const votes = JSON.parse(localStorage.getItem('becules_subject_votes')) || { chemistry: 0, mathematics: 0 };
+    votes[subj] = (votes[subj] || 0) + 1;
+    localStorage.setItem('becules_subject_votes', JSON.stringify(votes));
+    localStorage.setItem(votedKey, 'true');
+    initRequestVotes();
+    showToast(`Vote recorded! We'll prioritize ${subj.toUpperCase()}.`);
+}
+
+async function handleContributionSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const contributorName = form.querySelector('input[type="text"]').value || "Anonymous";
+    const subject = form.querySelectorAll('select')[0].value;
+    const classLevel = form.querySelectorAll('select')[1].value;
+    const materialTitle = form.querySelectorAll('input[type="text"]')[1].value;
+
+    try {
+        await fetch(`${SUPABASE_BASE_URL}/rest/v1/contributions`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+                contributor_name: contributorName,
+                subject: subject,
+                class_level: classLevel,
+                material_title: materialTitle
+            })
+        });
+    } catch (err) {
+        console.warn("Contribution cloud sync bypassed:", err);
+    }
+
+    showToast("Thank you! Contribution received for review.");
+    form.reset();
+}
+
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    const text = document.getElementById('toast-message');
+    if (!toast || !text) return;
+    text.textContent = msg;
+    toast.classList.remove('hidden');
+    setTimeout(() => { toast.classList.add('hidden'); }, 2800);
+}
