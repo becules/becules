@@ -1,208 +1,114 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Becules • Last-Minute ISC & JEE Physics Revision</title>
-  
-  <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Becules • Last-Minute ISC Physics Prep</title>
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '[data-theme="dark"]'],
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-slate-50 dark:bg-[#090d16] text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200 antialiased">
 
-  <!-- Ambient Glow Backdrop -->
-  <div class="ambient-glow glow-1"></div>
-  <div class="ambient-glow glow-2"></div>
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 w-full bg-white/90 dark:bg-[#0c1220]/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 transition-colors">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="navigateTo('home')">
+                    <span class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                        Becules<span class="text-teal-600 dark:text-teal-400">.</span>
+                    </span>
+                    <span class="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-teal-50 dark:bg-teal-950 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800">
+                        Physics Hub
+                    </span>
+                </div>
 
-  <!-- Navigation Bar -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="logo-box">
-        <div class="logo-symbol"><i class="fa-solid fa-atom"></i></div>
-        <span class="logo-text">Becules<span>.</span></span>
-        <span class="tag-version">ISC PHY</span>
-      </div>
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <button id="nav-home" onclick="navigateTo('home')" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition">Home</button>
+                    <button id="nav-resources" onclick="navigateTo('resources')" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition">Study & Practice</button>
+                    <button id="nav-about" onclick="navigateTo('about')" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition">About Us</button>
+                    <button id="nav-contribute" onclick="navigateTo('contribute')" class="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition">Contribute</button>
+                    
+                    <!-- Theme Toggle Button -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Toggle Theme" aria-label="Toggle Theme">
+                        <i id="theme-icon" class="fa-solid fa-moon text-base"></i>
+                    </button>
+                </nav>
 
-      <div class="nav-right">
-        <div class="pulse-indicator">
-          <span class="pulse-dot"></span>
-          <span class="pulse-label">Exam Sprint Active</span>
-        </div>
-
-        <!-- Light / Dark Mode Toggle Button -->
-        <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme" onclick="toggleTheme()">
-          <i class="fa-solid fa-moon icon-dark"></i>
-          <i class="fa-solid fa-sun icon-light"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="container hero-content">
-      <div class="hero-chip">
-        <i class="fa-solid fa-bolt-lightning text-gradient"></i>
-        <span>Built for the 11th-hour Crammer</span>
-      </div>
-      <h1 class="hero-heading">
-        Ace Physics Before <br/>
-        <span class="hero-gradient">The Morning Bell.</span>
-      </h1>
-      <p class="hero-subtext">
-        Zero fluff. Direct formula recaps, high-probability ISC MCQs, and instant breakdown solutions designed for maximum score recovery tonight.
-      </p>
-    </div>
-  </section>
-
-  <!-- Subject Access Grid -->
-  <section class="container subjects-wrapper">
-    <div class="section-title-row">
-      <div>
-        <h2 class="section-heading">Curriculum Modules</h2>
-        <p class="section-subheading">Physics is completely unlocked. Vote to fast-track remaining branches.</p>
-      </div>
-    </div>
-
-    <div class="cards-grid">
-      <!-- Active Physics Card -->
-      <div class="card-item live-card">
-        <div class="card-top">
-          <div class="icon-bubble physics-bubble">
-            <i class="fa-solid fa-atom"></i>
-          </div>
-          <span class="badge-status live-badge"><span class="badge-ping"></span> Live & Active</span>
-        </div>
-        <div class="card-info">
-          <h3>Physics Mastery</h3>
-          <p>Class 11 & 12 rapid concept drills, instant solutions, and formula summaries.</p>
-        </div>
-        <div class="card-stats">
-          <span class="highlight-stat"><i class="fa-solid fa-layer-group"></i> 22 Chapters Total</span>
-        </div>
-      </div>
-
-      <!-- Chemistry Card (Locked with Live Tracker) -->
-      <div class="card-item locked-card">
-        <div class="card-top">
-          <div class="icon-bubble chem-bubble">
-            <i class="fa-solid fa-flask-vial"></i>
-          </div>
-          <span class="badge-status locked-badge"><i class="fa-solid fa-lock"></i> Locked</span>
-        </div>
-        <div class="card-info">
-          <h3>Chemistry</h3>
-          <p>Organic reaction roadmaps, physical numericals, and reagent sheets.</p>
-        </div>
-        <div class="vote-action-bar">
-          <button class="upvote-btn" onclick="registerVote('chemistry')">
-            <i class="fa-solid fa-fire"></i> Request Access
-          </button>
-          <span class="vote-number" id="chem-count">Loading...</span>
-        </div>
-      </div>
-
-      <!-- Mathematics Card (Locked with Live Tracker) -->
-      <div class="card-item locked-card">
-        <div class="card-top">
-          <div class="icon-bubble math-bubble">
-            <i class="fa-solid fa-compass-drafting"></i>
-          </div>
-          <span class="badge-status locked-badge"><i class="fa-solid fa-lock"></i> Locked</span>
-        </div>
-        <div class="card-info">
-          <h3>Mathematics</h3>
-          <p>Calculus shortcuts, vector tricks, determinants, and step-saver guides.</p>
-        </div>
-        <div class="vote-action-bar">
-          <button class="upvote-btn" onclick="registerVote('mathematics')">
-            <i class="fa-solid fa-fire"></i> Request Access
-          </button>
-          <span class="vote-number" id="math-count">Loading...</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Main App Workspace -->
-  <main class="container workspace-container">
-    
-    <!-- Class Switcher -->
-    <div class="class-selector">
-      <div class="selector-track">
-        <button class="selector-btn" id="btn-11" onclick="switchClass(11)">
-          <span>Class XI</span>
-        </button>
-        <button class="selector-btn active" id="btn-12" onclick="switchClass(12)">
-          <span>Class XII</span>
-        </button>
-      </div>
-      <div class="score-pill" id="global-score-pill">
-        <i class="fa-solid fa-award"></i> Session: <span id="session-score">0</span> pts
-      </div>
-    </div>
-
-    <!-- Workspace Main Split -->
-    <div class="workspace-layout">
-      
-      <!-- Left Column: Chapter Navigator -->
-      <aside class="sidebar-box">
-        <div class="sidebar-header">
-          <div class="sidebar-title">
-            <i class="fa-solid fa-list-check"></i>
-            <span>Chapters</span>
-          </div>
-          <span class="chip-count" id="total-chapters-tag">0 Available</span>
-        </div>
-        <div class="chapters-scroll custom-scroll" id="chapter-list">
-          <!-- Populated by JavaScript -->
-        </div>
-      </aside>
-
-      <!-- Right Column: Quiz & Revision Arena -->
-      <section class="arena-box">
-        
-        <!-- Arena Navigation & Materials Bar -->
-        <div class="arena-top">
-          <div class="arena-meta">
-            <span class="tag-meta" id="current-badge">PHYSICS • CLASS 12</span>
-            <h2 class="arena-title" id="current-chapter-title">Loading chapter...</h2>
-          </div>
-          
-          <!-- Study Materials Capsule -->
-          <div class="materials-wrapper">
-            <span class="materials-label"><i class="fa-solid fa-paperclip"></i> Quick Sheets:</span>
-            <div class="materials-links" id="materials-container">
-              <!-- Dynamically populated buttons -->
+                <!-- Mobile Action Controls -->
+                <div class="md:hidden flex items-center space-x-2">
+                    <button onclick="toggleTheme()" class="p-2 text-slate-600 dark:text-slate-300">
+                        <i id="mobile-theme-icon" class="fa-solid fa-moon"></i>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="p-2 text-slate-600 dark:text-slate-300">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
 
-        <!-- Questions Mount Point -->
-        <div class="questions-stream" id="questions-stream">
-          <!-- MCQs injected here -->
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0c1220] px-4 pt-3 pb-5 space-y-2">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left py-2 text-sm font-semibold text-slate-700 dark:text-slate-200">Home</button>
+            <button onclick="navigateTo('resources'); toggleMobileMenu()" class="block w-full text-left py-2 text-sm font-semibold text-slate-700 dark:text-slate-200">Study & Practice</button>
+            <button onclick="navigateTo('about'); toggleMobileMenu()" class="block w-full text-left py-2 text-sm font-semibold text-slate-700 dark:text-slate-200">About Us</button>
+            <button onclick="navigateTo('contribute'); toggleMobileMenu()" class="block w-full text-left py-2 text-sm font-semibold text-slate-700 dark:text-slate-200">Contribute</button>
         </div>
+    </header>
 
-      </section>
+    <!-- Main Dynamic Content Region -->
+    <main id="main-content" class="flex-grow">
+        <!-- Rendered by script.js -->
+    </main>
+
+    <!-- Floating Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-lg text-xs font-semibold flex items-center space-x-2 transition-all">
+        <span id="toast-message">Notification</span>
     </div>
-  </main>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="toast-popup hidden"></div>
+    <!-- Minimal Clean Footer -->
+    <footer class="border-t border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0c1220] py-8 transition-colors">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                Becules • Built for Last-Minute Revision by students of Ida Scudder School (Batch of 2028)
+            </p>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Open-Source • Free Forever • No Ads</p>
+        </div>
+    </footer>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-content">
-      <p class="footer-brand">Becules <span>//</span> Built by students of Ida Scudder School (Batch of 2028)</p>
-      <p class="footer-sub">Open-Source • Zero Ads • Free Forever</p>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
