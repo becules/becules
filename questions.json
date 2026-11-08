@@ -2,54 +2,39 @@
   "physics": {
     "11": [
       {
-        "title": "Physical World & Units and Measurement",
-        "summary": "Focus heavily on dimensional formulas of constants (G, h, η, permeability), checking the consistency of physical equations, and propagation of percentage errors (ΔZ/Z = a·ΔA/A + b·ΔB/B).",
+        "title": "Units & Measurements",
+        "summary": "Master dimensional formulas of constants (G, h, η, permeability), principle of homogeneity, and propagation of percentage errors: ΔZ/Z = a(ΔA/A) + b(ΔB/B).",
         "materials": [
-          { "label": "Dimensions & Constants Cheat Sheet (PDF)", "url": "#", "icon": "fa-solid fa-file-pdf" },
-          { "label": "Error Propagation 1-Page Summary", "url": "#", "icon": "fa-solid fa-bolt" }
+          { "label": "Dimensions & Formulas Cheat Sheet", "url": "#", "icon": "fa-solid fa-file-pdf" },
+          { "label": "Error Analysis 1-Page Summary", "url": "#", "icon": "fa-solid fa-bolt" }
         ],
         "questions": [
           {
             "question": "What is the dimensional formula for the Universal Gravitational Constant (G)?",
-            "options": [
-              "[M⁻¹ L³ T⁻²]",
-              "[M¹ L² T⁻²]",
-              "[M⁻² L³ T⁻¹]",
-              "[M¹ L³ T⁻²]"
-            ],
+            "options": ["[M⁻¹ L³ T⁻²]", "[M¹ L² T⁻²]", "[M⁻² L³ T⁻¹]", "[M¹ L³ T⁻²]"],
             "correct": 0,
             "explanation": "From F = G(m₁m₂)/r², G = F·r²/(m₁m₂). Substituting dimensions: [M L T⁻²][L²] / [M²] = [M⁻¹ L³ T⁻²]."
           },
           {
-            "question": "If percentage errors in measuring mass and speed are 2% and 3% respectively, the maximum error in calculated Kinetic Energy is:",
-            "options": [
-              "5%",
-              "8%",
-              "11%",
-              "12%"
-            ],
+            "question": "If the error in measuring mass is 2% and velocity is 3%, the maximum percentage error in Kinetic Energy is:",
+            "options": ["5%", "8%", "11%", "12%"],
             "correct": 1,
-            "explanation": "K = (1/2)mv². Percentage error ΔK/K = (Δm/m) + 2(Δv/v) = 2% + 2(3%) = 8%."
+            "explanation": "K = (1/2)mv². Error: ΔK/K = (Δm/m) + 2(Δv/v) = 2% + 2(3%) = 8%."
           }
         ]
       },
       {
         "title": "Laws of Motion",
-        "summary": "Revise Free Body Diagrams (FBD), impulse theorem (J = Δp = F·Δt), apparent weight in an elevator, and maximum friction force f_max = μ_s · N.",
+        "summary": "High yield: Free Body Diagrams (FBD), impulse J = Δp = F·Δt, apparent weight in elevators, and limiting static friction f_max = μ_s · N.",
         "materials": [
-          { "label": "Friction & Pulley Formulas (PDF)", "url": "#", "icon": "fa-solid fa-file-pdf" }
+          { "label": "Friction & Pulley Formulas Handout", "url": "#", "icon": "fa-solid fa-file-pdf" }
         ],
         "questions": [
           {
-            "question": "A 2kg block rests on a rough horizontal floor (μs = 0.4). If a 5N force is applied horizontally, the static friction force is:",
-            "options": [
-              "7.84 N",
-              "5 N",
-              "0 N",
-              "2 N"
-            ],
+            "question": "A 2kg block rests on a rough floor (μs = 0.4). If a 5N force is applied horizontally, static friction force is:",
+            "options": ["7.84 N", "5 N", "0 N", "2 N"],
             "correct": 1,
-            "explanation": "Limiting friction f_max = μs·m·g = 0.4 × 2 × 9.8 = 7.84 N. Because applied force (5N) is less than limiting friction, static friction self-adjusts to equal 5 N."
+            "explanation": "Limiting friction f_max = μs·m·g = 0.4 × 2 × 9.8 = 7.84 N. Because applied force (5N) is less than limiting friction, static friction adjusts to equal 5 N."
           }
         ]
       }
@@ -57,64 +42,44 @@
     "12": [
       {
         "title": "Electric Charges and Fields",
-        "summary": "Crucial topics: Coulomb's Law in vector form, torque on a dipole (τ = p × E), potential energy (U = -p · E), and Gauss's Law applications for thin wire, infinite plane sheet, and spherical shell.",
+        "summary": "Crucial concepts: Coulomb's Law in vector form, torque on dipole (τ = p × E), potential energy (U = -p · E), and Gauss's Law for infinite line and plane sheet.",
         "materials": [
-          { "label": "Gauss's Law Derivations Summary (PDF)", "url": "#", "icon": "fa-solid fa-file-pdf" },
+          { "label": "Gauss Law Derivations Summary", "url": "#", "icon": "fa-solid fa-file-pdf" },
           { "label": "Dipole Formulas Quick Sheet", "url": "#", "icon": "fa-solid fa-bolt" }
         ],
         "questions": [
           {
-            "question": "An electric dipole of moment p is placed in a uniform electric field E. The torque experienced by it is maximum when the angle between p and E is:",
-            "options": [
-              "0°",
-              "45°",
-              "90°",
-              "180°"
-            ],
+            "question": "An electric dipole of moment p is placed in a uniform field E. The torque is maximum when the angle between p and E is:",
+            "options": ["0°", "45°", "90°", "180°"],
             "correct": 2,
-            "explanation": "Torque is given by τ = pE sin(θ). The sine function attains its maximum value of 1 when θ = 90°."
+            "explanation": "Torque is τ = pE sin(θ). The sine function attains its maximum value of 1 when θ = 90°."
           },
           {
-            "question": "If the radius of a Gaussian sphere enclosing a point charge is doubled, the electric flux passing through the sphere:",
-            "options": [
-              "Is halved",
-              "Is doubled",
-              "Remains unchanged",
-              "Quadruples"
-            ],
-            "correct": 2,
-            "explanation": "By Gauss's Law, Φ = Q_enclosed / ε₀. Flux depends strictly on the net enclosed charge, not on the dimensions of the Gaussian surface."
-          },
-          {
-            "question": "What is the SI unit of electric flux?",
-            "options": [
-              "N / C",
-              "N m² / C",
-              "V / m",
-              "J / C"
-            ],
+            "question": "What is the SI unit of electric flux (Φ)?",
+            "options": ["N / C", "N m² / C", "V / m", "J / C"],
             "correct": 1,
-            "explanation": "Flux Φ = E · A = (Force / Charge) × Area = (N/C) × m² = N m² / C (also equivalent to Volt·meter)."
+            "explanation": "Flux Φ = E · A = (Force / Charge) × Area = (N / C) × m² = N m² / C (also equivalent to Volt·meter)."
+          },
+          {
+            "question": "If the radius of a Gaussian sphere enclosing a point charge is doubled, the total electric flux:",
+            "options": ["Halves", "Doubles", "Remains unchanged", "Quadruples"],
+            "correct": 2,
+            "explanation": "By Gauss's Law, Φ = Q_enclosed / ε₀. Total flux depends solely on the enclosed charge, not the surface radius."
           }
         ]
       },
       {
         "title": "Current Electricity",
-        "summary": "High probability: Drift velocity relation (I = n·e·A·v_d), temperature coefficient of resistance, Kirchhoff's Junction & Loop rules, and Wheatstone bridge balance condition.",
+        "summary": "High probability: Drift velocity (I = n·e·A·v_d), temperature coefficient of resistance, Kirchhoff's Junction & Loop rules, and Wheatstone bridge balance condition.",
         "materials": [
-          { "label": "Kirchhoff Rules & Bridge Circuit Handout (PDF)", "url": "#", "icon": "fa-solid fa-file-pdf" }
+          { "label": "Kirchhoff Rules & Bridge Circuits Handout", "url": "#", "icon": "fa-solid fa-file-pdf" }
         ],
         "questions": [
           {
-            "question": "Two resistors of 3 Ω and 6 Ω are connected in parallel across an ideal 6V battery. The total current drawn from the battery is:",
-            "options": [
-              "1 A",
-              "2 A",
-              "3 A",
-              "9 A"
-            ],
+            "question": "Two resistors of 3 Ω and 6 Ω are connected in parallel across an ideal 6V battery. Total current drawn is:",
+            "options": ["1 A", "2 A", "3 A", "9 A"],
             "correct": 2,
-            "explanation": "Parallel resistance: R_eq = (3 × 6) / (3 + 6) = 18 / 9 = 2 Ω. Current I = V / R_eq = 6V / 2Ω = 3 A."
+            "explanation": "Parallel resistance: R_eq = (3 × 6)/(3 + 6) = 2 Ω. Current I = V / R_eq = 6V / 2Ω = 3 A."
           }
         ]
       }
