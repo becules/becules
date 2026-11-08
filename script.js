@@ -383,7 +383,7 @@ function renderAboutPage() {
 
                 <div class="mt-6 p-4 rounded-xl bg-teal-50/60 dark:bg-teal-950/40 border border-teal-100 dark:border-teal-900 text-xs text-slate-700 dark:text-slate-300">
                     <p class="font-bold text-teal-900 dark:text-teal-200 mb-1"><i class="fa-solid fa-graduation-cap mr-1"></i> Student-Created Project</p>
-                    Built by students from <strong>Ida Scudder School (ISC Batch of 2028)</strong>—learning from the same syllabus, facing the same board expectations, and solving real exam prep bottlenecks together.
+                    Built by students who <strong></strong>—learn from the same syllabus, facing the same board expectations, and solving real exam prep bottlenecks together.
                 </div>
 
                 <ul class="mt-6 space-y-3 text-xs font-semibold text-slate-700 dark:text-slate-300">
